@@ -5,6 +5,7 @@ const userRoutes = require('./routes/userRoutes');
 const expenseRoutes = require('./routes/expenseRoutes');
 const categoryRoutes= require('./routes/categoryRoutes');
 const method_payRoutes = require('./routes/method_payRoutes');
+const deposit= require('./routes/depositRoutes');
 
 const app = express();
 const PORT = 3000;
@@ -16,6 +17,7 @@ app.use(userRoutes);
 app.use(expenseRoutes);
 app.use(categoryRoutes);
 app.use(method_payRoutes);
+app.use(deposit);
 
 // Sincronizar la base de datos y luego iniciar el servidor
 sequelize.sync().then(() => {
