@@ -20,6 +20,6 @@ app.use(method_payRoutes);
 // Sincronizar la base de datos y luego iniciar el servidor
 sequelize.sync().then(() => {
   app.listen(PORT, () => {
-    console.log(`El servidor está escuchando en el puerto ${PORT}`);
+    console.log(`Le server est connecté au ${PORT}`);
   });
 });
