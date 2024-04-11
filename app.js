@@ -6,20 +6,35 @@ const expenseRoutes = require('./routes/expenseRoutes');
 const categoryRoutes= require('./routes/categoryRoutes');
 const method_payRoutes = require('./routes/method_payRoutes');
 const deposit= require('./routes/depositRoutes');
-
+const cors = require('cors');
 const app = express();
 const PORT = 3000;
+const session = require('express-session');
+require('dotenv').config();
+
+
+app.use(session({
+  secret: 'mySecretKey',
+  resave: false,
+  saveUninitialized: true
+}));
+app.use(cors({
+  origin: 'http://localhost:8100',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 
 app.use(express.json());
 
-// Configuración de rutas
+// Configuration routes
 app.use(userRoutes);
 app.use(expenseRoutes);
 app.use(categoryRoutes);
 app.use(method_payRoutes);
 app.use(deposit);
 
-// Sincronizar la base de datos y luego iniciar el servidor
+// Sincronization routes et configuration BDD
 sequelize.sync().then(() => {
   app.listen(PORT, () => {
     console.log(`Le server est connecté au ${PORT}`);
