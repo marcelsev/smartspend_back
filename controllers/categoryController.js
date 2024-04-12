@@ -35,7 +35,9 @@ module.exports = {
             console.error(error);
             res.status(500).send('Error');
         }
-    },async updateCategory(req, res) {
+    },
+    
+    async updateCategory(req, res) {
       try {
           const { id } = req.params;
           const { name } = req.body;

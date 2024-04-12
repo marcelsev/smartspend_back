@@ -12,7 +12,7 @@ const PORT = 3000;
 const session = require('express-session');
 require('dotenv').config();
 
-
+const jwtSecret = process.env.JWT_SECRET;
 app.use(session({
   secret: 'mySecretKey',
   resave: false,

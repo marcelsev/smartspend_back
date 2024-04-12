@@ -56,9 +56,27 @@ module.exports = {
     }
   },
 
+  
+/* async getUserById(req, res) {
+  try {
+    const { id } = req.params;
+    const user = await User.findByPk(id);
+
+    if (!user) {
+        return res.status(404).json({ error: 'user non found' });
+    }
+
+    res.json(user);
+} catch (error) {
+    console.error(error);
+    res.status(500).send('Error');
+}
+}, */
+
   async getUserById(req, res) {
     try {
-      const userId = req.user.userId; // ID del usuario autenticado extraído del token
+      
+      const userId = req.userId; // ID del usuario autenticado extraído del token
       const user = await User.findByPk(userId, { attributes: { exclude: ['password'] } });
       if (!user) {
         return res.status(404).json({ error: 'Usuario no encontrado' });
@@ -68,7 +86,7 @@ module.exports = {
       console.error(error);
       res.status(500).json({ error: 'Error interno del servidor' });
     }
-  },
+  }, 
 
   async updateUser(req, res) {
     try {
