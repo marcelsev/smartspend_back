@@ -9,18 +9,18 @@ module.exports = {
 
     
       if (!name || !surname || !email || !password ) {
-        return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+        return res.status(400).json({ error: 'tous le champs sont obligatoires' });
       }
 
       const existingUserEmail = await User.findOne({ where: { email } });
       if (existingUserEmail) {
-        return res.status(400).json({ error: 'El correo electrónico ya está registrado' });
+        return res.status(400).json({ error: 'email obligatoire' });
       }
 
       
       const existingSurname = await User.findOne({ where: { surname } });
       if (existingSurname) {
-        return res.status(400).json({ error: 'El pseudónimo ya está registrado' });
+        return res.status(400).json({ error: 'pseudo obligatoire' });
       }
 
       
@@ -79,7 +79,7 @@ module.exports = {
       const userId = req.userId; // ID del usuario autenticado extraído del token
       const user = await User.findByPk(userId, { attributes: { exclude: ['password'] } });
       if (!user) {
-        return res.status(404).json({ error: 'Usuario no encontrado' });
+        return res.status(404).json({ error: 'User non found' });
       }
       res.json(user);
     } catch (error) {

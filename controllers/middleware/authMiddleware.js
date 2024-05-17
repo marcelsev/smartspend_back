@@ -7,7 +7,7 @@ exports.authenticate = (req, res, next) => {
     let token = req.headers['Authorization'] || req.headers['authorization'];
    console.log('backend',token);
     if (!token) {
-      return res.status(401).json({ message: 'Token de autenticación requerido' });
+      return res.status(401).json({ message: 'Token requered' });
     }
     token = token.split(' ')[1];
     console.log('token split',token);
@@ -16,14 +16,14 @@ exports.authenticate = (req, res, next) => {
       req.userId = userId; 
       next(); 
     } catch (error) {
-      console.error('Error al verificar el token:', error);
+      console.error('Error token:', error);
   
       if (error.name === 'JsonWebTokenError') {
-        return res.status(401).json({ message: 'Token de autenticación inválido' });
+        return res.status(401).json({ message: 'Token invalid' });
       } else if (error.name === 'TokenExpiredError') {
-        return res.status(401).json({ message: 'Token expirado' });
+        return res.status(401).json({ message: 'Token expired' });
       } else {
-        return res.status(500).json({ message: 'Error interno del servidor' });
+        return res.status(500).json({ message: 'Error server interno' });
       }
     }
   };
