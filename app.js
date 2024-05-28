@@ -22,7 +22,7 @@ app.use(session({
 }));
 app.use(cors({
   origin: 'http://localhost:8100',
-  methods: ['GET', 'POST'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-XSRF-TOKEN'],  credentials: true
 }));
 
@@ -49,9 +49,12 @@ app.use(categoryRoutes);
 app.use(method_payRoutes);
 app.use(deposit);
 
-// Sincronization routes et configuration BDD
+
+module.exports = app;
+/* // Sincronization routes et configuration BDD
 sequelize.sync().then(() => {
   app.listen(PORT, () => {
     console.log(`Le server est connecté au ${PORT}`);
   });
 });
+ */
