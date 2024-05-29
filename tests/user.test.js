@@ -1,8 +1,8 @@
 // tests/user.test.js
 const request = require('supertest');
 const app = require('../app');
-const { User, sequelize } = require('../models');
-
+const User = require('../models');
+const sequelize = require('sequelize');
 let server;
 let csrfToken;
 let token;
