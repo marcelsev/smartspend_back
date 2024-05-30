@@ -14,7 +14,7 @@ const PORT = 3000;
 const session = require('express-session');
 require('dotenv').config();
 
-const jwtSecret = process.env.JWT_SECRET;
+//const jwtSecret = process.env.JWT_SECRET;
 app.use(session({
   secret: 'mySecretKey',
   resave: false,
@@ -51,10 +51,10 @@ app.use(deposit);
 
 
 module.exports = app;
-/* // Sincronization routes et configuration BDD
-sequelize.sync().then(() => {
+ // Sincronization routes et configuration BDD
+ sequelize.sync().then(() => {
   app.listen(PORT, () => {
     console.log(`Le server est connecté au ${PORT}`);
   });
-});
- */
+}); 
+ 

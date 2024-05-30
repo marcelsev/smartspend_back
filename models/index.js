@@ -30,7 +30,7 @@ fs
   })
   .forEach(file => {
   let model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-    
+  db[model.name] = model;
   });
 
 Object.keys(db).forEach(modelName => {
@@ -38,7 +38,7 @@ Object.keys(db).forEach(modelName => {
     db[modelName].associate(db);
   }
 });
-
+sequelize.sync();
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

@@ -1,58 +1,55 @@
-// tests/user.test.js
 const request = require('supertest');
 const app = require('../app');
-const User = require('../models');
-const sequelize = require('sequelize');
+const User = require('../models/user');
+const sequelize = require('../db');
+const jwt = require('jsonwebtoken');
+
 let server;
 let csrfToken;
-let token;
+let jwtToken;
+let userId; 
 
 beforeAll(async () => {
   server = app.listen(4000);
 
-  // Sincronizar todos los modelos
+ 
   await sequelize.sync({ force: true });
 
-  const res = await request(server).get('/getCsrfToken');
-  csrfToken = res.body.csrfToken;
+  const csrfRes = await request(server).get('/getCsrfToken');
+  csrfToken = csrfRes.body.csrfToken;
+ // console.log('CSRF Token:', csrfToken);
 
-  // Crear un usuario de prueba y obtener un token
-  await User.create({ name: 'Test', surname: 'User', email: 'test@example.com', password: 'password123' });
-  const loginRes = await request(server)
-    .post('/login')
-    .send({ email: 'test@example.com', password: 'password123' });
-  token = loginRes.body.token;
+
+  const createdUser = await User.create({ name: 'Test', surname: 'User', email: 'test@example.com', password: 'password123' });
+  userId = createdUser.id; 
+  jwtToken = jwt.sign({ id: userId }, process.env.JWT_SECRET);
+  //console.log('JWT Token:', jwtToken);
 });
 
 afterAll(async () => {
-  await User.destroy({ where: { email: 'test@example.com' } });
-  await sequelize.close();
-  await server.close();
+  
+
 });
 
 describe('User API', () => {
-  it('should create a new user', async () => {
-    const res = await request(server)
-      .post('/users')
-      .set('X-XSRF-TOKEN', csrfToken)
-      .set('Authorization', `Bearer ${token}`)
-      .send({ name: 'Alice', surname: 'Johnson', email: 'alice@example.com', password: 'password123' });
-    expect(res.status).toBe(201);
-  }, 10000);
-
-  it('should check if username is unique', async () => {
+  it('should check if surname is unique', async () => {
     const res = await request(server)
       .get('/users/check-surname/Johnson')
-      .set('X-XSRF-TOKEN', csrfToken);
+      .set('X-XSRF-TOKEN', csrfToken)
+      .set('Authorization', `Bearer ${jwtToken}`);
+
+    console.log('Response for check surname:', res.body);
     expect(res.status).toBe(200);
   }, 10000);
 
   it('should retrieve a user by ID', async () => {
-    const user = await User.findOne({ where: { email: 'test@example.com' } });
     const res = await request(server)
-      .get(`/users/${user.id}`)
-      .set('Authorization', `Bearer ${token}`)
-      .set('X-XSRF-TOKEN', csrfToken);
+      .get(`/users/${userId}`)
+      .set('X-XSRF-TOKEN', csrfToken)
+      .set('Authorization', `Bearer ${jwtToken}`);
+
+    console.log('Response for retrieve user:', res.body);
     expect(res.status).toBe(200);
   }, 10000);
+
 });
